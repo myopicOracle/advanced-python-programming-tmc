@@ -14,4 +14,10 @@ class Person:
         self.pet = pet
 
     def __str__(self):
-        return self.name
+        return f"{self.name}, whose pal is {self.pet.name}, a {self.pet.description}"
+
+
+# hulda = Pet("Hulda", "mixed-breed dog")
+# levi = Person("Levi", hulda)
+
+# print(levi)
