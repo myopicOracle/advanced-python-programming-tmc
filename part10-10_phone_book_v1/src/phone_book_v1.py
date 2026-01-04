@@ -15,6 +15,13 @@ class PhoneBook:
             return None
         return self.__persons[name]
 
+    def get_name(self, number: str):
+        match = None
+        for name, num_list in self.__persons.items():
+            for num in num_list:
+                if num == number:
+                    match = name
+        return match
 
     def all_entries(self):
         return self.__persons
@@ -25,11 +32,14 @@ class FileHandler():
 
     def load_file(self):
         names = {}
-        with open(self.__filename) as f:
-            for line in f:
-                parts = line.strip().split(';')
-                name, *numbers = parts
+        try:
+            with open(self.__filename) as f:
+                for line in f:
+                    parts = line.strip().split(';')
+                    name, *numbers = parts
                 names[name] = numbers
+        except FileNotFoundError:
+            pass
         return names
 
     def save_file(self, phonebook: dict):
@@ -53,6 +63,7 @@ class PhoneBookApplication:
         print("0 exit")
         print("1 add entry")
         print("2 search")
+        print("3 search by number")
 
     def add_entry(self):
         name = input("name: ")
@@ -68,12 +79,20 @@ class PhoneBookApplication:
         for number in numbers:
             print(number)
 
+    def search_by_number(self):
+        number = input("number: ")
+        name = self.__phonebook.get_name(number)
+        if name == None:
+            print("unknown number")
+            return
+        print(name)
+
     def exit(self):
         self.__filehandler.save_file(self.__phonebook.all_entries())
 
 
     def execute(self):
-        self.help()
+        # self.help() # causing test to fail (test_3_by_number_1)
         while True:
             print("")
             command = input("command: ")
@@ -84,6 +103,8 @@ class PhoneBookApplication:
                 self.add_entry()
             elif command == "2":
                 self.search()
+            elif command == "3":
+                self.search_by_number()
             else:
                 self.help()
 
