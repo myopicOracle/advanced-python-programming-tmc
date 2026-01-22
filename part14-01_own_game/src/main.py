@@ -37,13 +37,33 @@ class MonstersInc:
     def __init__(self):
         pygame.init()
 
+        pygame.display.set_caption("Monsters INC.")
+        self.window = pygame.display.set_mode((1080, 720))
+        self.clock = pygame.time.Clock()
+
+        self.game_font = pygame.font.SysFont("Arial", 24)
+        self.title_font = pygame.font.SysFont("Arial", 36)
+
+        self.robot = pygame.image.load("robot.png")
+        self.robot_width = robot.get_width()
+        self.robot_height = robot.get_height()
+
+        self.game_loop()
+
     def game_loop(self):
-        pass
+        self.check_events()
+        self.paint_screen()
 
     def check_events(self):
         pass
 
     def paint_screen(self):
+        pass
+
+    def spawn_coin():
+        pass
+
+    def spawn_monster():
         pass
 
 
