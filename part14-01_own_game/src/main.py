@@ -67,12 +67,11 @@ class MonstersInc:
         pass
 
 
-class Coin:
+class Sprite:
 
     def __init__(self):
         self.__x_coord = 0
         self.__y_coord = 0
-        self.__duration = 3
 
     @property
     def x_coord(self):
@@ -90,6 +89,13 @@ class Coin:
     def y_coord(self, new_val):
         self.__y_coord = new_val
 
+
+class Coin(Sprite):
+
+    def __init__(self, duration = 3):
+        super().__init__()
+        self.__duration = duration;
+
     @property
     def duration(self):
         return self.__duration
@@ -98,3 +104,17 @@ class Coin:
     def duration(self, new_val):
         self.__duration = new_val
 
+
+class Monster(Sprite):
+
+    def __init__(self, velocity = 1):
+        super().__init__()
+        self.__velocity = velocity;
+
+    @property
+    def velocity(self):
+        return self.__velocity
+
+    @velocity.setter
+    def velocity(self, new_val):
+        self.__velocity = new_val
