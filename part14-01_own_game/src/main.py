@@ -36,7 +36,11 @@ class MonstersInc:
 
     def __init__(self):
         pygame.init()
+        self.setup_gui()
+        self.setup_state()
+        self.game_loop()
 
+    def setup_gui(self):
         pygame.display.set_caption("Monsters INC.")
         self.window = pygame.display.set_mode((1080, 720))
         self.clock = pygame.time.Clock()
@@ -45,17 +49,51 @@ class MonstersInc:
         self.title_font = pygame.font.SysFont("Arial", 36)
 
         self.robot = pygame.image.load("robot.png")
-        self.robot_width = robot.get_width()
-        self.robot_height = robot.get_height()
+        self.coin = pygame.image.load("coin.png")
+        self.monster = pygame.image.load("monster.png")
 
-        self.game_loop()
+    def setup_state(self):
+        self.robot_velocity = 2
+        self.all_coins = []
+        self.all_monsters = []
+
+        self.to_up = False
+        self.to_down = False
+        self.to_right = False
+        self.to_left = False
+
+        self.points = 0
+        self.game_over = False
+        self.game_started = False
 
     def game_loop(self):
         self.check_events()
         self.paint_screen()
 
     def check_events(self):
-        pass
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                exit()
+
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_UP:
+                    self.to_up = True
+                if event.key == pygame.K_DOWN:
+                    self.to_down = True
+                if event.key == pygame.K_RIGHT:
+                    self.to_right = True
+                if event.key == pygame.K_LEFT:
+                    self.to_left = True
+
+            if event.type == pygame.KEYUP:
+                if event.key == pygame.K_UP:
+                    self.to_up = False
+                if event.key == pygame.K_DOWN:
+                    self.to_down = False
+                if event.key == pygame.K_RIGHT:
+                    self.to_right = False
+                if event.key == pygame.K_LEFT:
+                    self.to_left = False
 
     def paint_screen(self):
         pass
