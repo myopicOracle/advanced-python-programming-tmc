@@ -31,6 +31,7 @@
 
 
 import pygame
+from random import randint
 
 class MonstersInc:
 
@@ -49,8 +50,16 @@ class MonstersInc:
         self.title_font = pygame.font.SysFont("Arial", 36)
 
         self.robot = pygame.image.load("robot.png")
+        self.robot_width = self.robot.get_width()
+        self.robot_height = self.robot.get_height()
+
         self.coin = pygame.image.load("coin.png")
+        self.coin_width = self.coin.get_width()
+        self.coin_height = self.coin.get_height()
+
         self.monster = pygame.image.load("monster.png")
+        self.monster_width = self.monster.get_width()
+        self.monster_height = self.monster.get_height()
 
     def setup_state(self):
         self.all_coins = []
@@ -66,6 +75,7 @@ class MonstersInc:
         self.to_left = False
 
         self.points = 0
+        self.coin_timer = 0
         self.game_over = False
         self.game_started = False
 
@@ -104,13 +114,16 @@ class MonstersInc:
     def paint_screen(self):
         # Clear previous screen
         self.window.fill((0, 0, 0))
+        self.update_player()
+        self.spawn_coin()
 
+    def update_player(self):
         # Update object coordinates
         if self.robot_y > 0 and self.to_up:
                 self.robot_y -= self.robot_velocity
-        if self.robot_y < 720 - self.robot.get_height() and self.to_down:
+        if self.robot_y < 720 - self.robot_height and self.to_down:
                 self.robot_y += self.robot_velocity
-        if self.robot_x < 1080 - self.robot.get_width() and self.to_right:
+        if self.robot_x < 1080 - self.robot_width and self.to_right:
                 self.robot_x += self.robot_velocity
         if self.robot_x > 0 and self.to_left:
                 self.robot_x -= self.robot_velocity
@@ -118,9 +131,15 @@ class MonstersInc:
         # Render new location
         self.window.blit(self.robot, (self.robot_x, self.robot_y))
 
-
-    def spawn_coin():
+    def spawn_coin(self):
         pass
+
+    def check_collision(self, width, height, object_array):
+        for object in object_array[:]:
+            x_collide = (object.x_coord < self.robot_x + self.robot_width and object.x_coord + width > self.robot_x)
+            y_collide = (object.y_coord < self.robot_y + self.robot_height and object.y_coord + height > self.robot_y)
+            
+            return x_collide and y_collide
 
     def spawn_monster():
         pass
