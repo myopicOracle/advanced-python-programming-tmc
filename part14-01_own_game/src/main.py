@@ -53,9 +53,12 @@ class MonstersInc:
         self.monster = pygame.image.load("monster.png")
 
     def setup_state(self):
-        self.robot_velocity = 2
         self.all_coins = []
         self.all_monsters = []
+
+        self.robot_velocity = 2
+        self.robot_x = 0
+        self.robot_y = 0
 
         self.to_up = False
         self.to_down = False
@@ -67,8 +70,11 @@ class MonstersInc:
         self.game_started = False
 
     def game_loop(self):
-        self.check_events()
-        self.paint_screen()
+        while True: 
+            self.check_events()
+            self.paint_screen()
+            pygame.display.flip()
+            self.clock.tick(60)
 
     def check_events(self):
         for event in pygame.event.get():
@@ -96,7 +102,22 @@ class MonstersInc:
                     self.to_left = False
 
     def paint_screen(self):
-        pass
+        # Clear previous screen
+        self.window.fill((0, 0, 0))
+
+        # Update object coordinates
+        if self.robot_y > 0 and self.to_up:
+                self.robot_y -= self.robot_velocity
+        if self.robot_y < 720 - self.robot.get_height() and self.to_down:
+                self.robot_y += self.robot_velocity
+        if self.robot_x < 1080 - self.robot.get_width() and self.to_right:
+                self.robot_x += self.robot_velocity
+        if self.robot_x > 0 and self.to_left:
+                self.robot_x -= self.robot_velocity
+
+        # Render new location
+        self.window.blit(self.robot, (self.robot_x, self.robot_y))
+
 
     def spawn_coin():
         pass
@@ -156,3 +177,8 @@ class Monster(Sprite):
     @velocity.setter
     def velocity(self, new_val):
         self.__velocity = new_val
+
+
+# Test
+if __name__ == "__main__":
+    MonstersInc()
