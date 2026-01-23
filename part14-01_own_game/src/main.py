@@ -132,14 +132,27 @@ class MonstersInc:
         self.window.blit(self.robot, (self.robot_x, self.robot_y))
 
     def spawn_coin(self):
-        pass
+        self.coin_timer += 1
+        if self.coin_timer >= 180:
+            new_coin = Coin()
+            new_coin.x_coord = randint(0, 1080 - self.coin_width)
+            new_coin.y_coord = randint(0, 720 - self.coin_height)
+            self.all_coins.append(new_coin)
+            self.coin_timer = 0
 
-    def check_collision(self, width, height, object_array):
-        for object in object_array[:]:
-            x_collide = (object.x_coord < self.robot_x + self.robot_width and object.x_coord + width > self.robot_x)
-            y_collide = (object.y_coord < self.robot_y + self.robot_height and object.y_coord + height > self.robot_y)
-            
-            return x_collide and y_collide
+        for this_coin in self.all_coins[:]:
+            if self.check_collision(this_coin, self.coin_width, self.coin_height):
+                self.points += 1
+                self.all_coins.remove(this_coin)
+            else:
+                self.window.blit(self.coin, (this_coin.x_coord, this_coin.y_coord))
+
+
+    def check_collision(self, this_obj, width, height):
+        x_collide = (this_obj.x_coord < self.robot_x + self.robot_width and this_obj.x_coord + width > self.robot_x)
+        y_collide = (this_obj.y_coord < self.robot_y + self.robot_height and this_obj.y_coord + height > self.robot_y)
+        
+        return x_collide and y_collide
 
     def spawn_monster():
         pass
