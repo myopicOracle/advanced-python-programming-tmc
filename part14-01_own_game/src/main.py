@@ -74,8 +74,10 @@ class MonstersInc:
         self.to_right = False
         self.to_left = False
 
-        self.points = 0
         self.coin_timer = 0
+        self.monster_timer = 0
+        
+        self.points = 0
         self.game_over = False
         self.game_started = False
 
@@ -113,9 +115,10 @@ class MonstersInc:
 
     def paint_screen(self):
         # Clear previous screen
-        self.window.fill((0, 0, 0))
+        self.window.fill((109, 129, 150))
         self.update_player()
         self.spawn_coin()
+        self.spawn_monster()
 
     def update_player(self):
         # Update object coordinates
@@ -154,8 +157,28 @@ class MonstersInc:
         
         return x_collide and y_collide
 
-    def spawn_monster():
-        pass
+    def spawn_monster(self):
+        self.monster_timer += 1
+        if self.monster_timer >= 1800:
+            new_monster = Monster()
+            new_monster.x_coord = randint(0, 1080 - self.monster_width)
+            new_monster.y_coord = randint(0, 720 - self.monster_height)
+            self.all_monsters.append(new_monster)
+            self.monster_timer = 0
+
+        for this_monster in self.all_monsters[:]:
+            if this_monster.x_coord + self.monster_width > 1080 or this_monster.x_coord < 0:
+                this_monster.velocity_x = -this_monster.velocity_x
+            if this_monster.y_coord + self.monster_height > 720 or this_monster.y_coord < 0:
+                this_monster.velocity_y = -this_monster.velocity_y
+            
+            this_monster.x_coord += this_monster.velocity_x
+            this_monster.y_coord += this_monster.velocity_y
+
+            if self.check_collision(this_monster, self.monster_width, self.monster_height):
+                self.game_over = True
+            else:
+                self.window.blit(self.monster, (this_monster.x_coord, this_monster.y_coord))
 
 
 class Sprite:
@@ -200,7 +223,9 @@ class Monster(Sprite):
 
     def __init__(self, velocity = 1):
         super().__init__()
-        self.__velocity = velocity;
+        self.__velocity = velocity
+        self.__velocity_x = velocity
+        self.__velocity_y = velocity
 
     @property
     def velocity(self):
@@ -209,6 +234,22 @@ class Monster(Sprite):
     @velocity.setter
     def velocity(self, new_val):
         self.__velocity = new_val
+
+    @property
+    def velocity_x(self):
+        return self.__velocity_x
+
+    @velocity_x.setter
+    def velocity_x(self, new_val):
+        self.__velocity_x = new_val
+
+    @property
+    def velocity_y(self):
+        return self.__velocity_y
+
+    @velocity_y.setter
+    def velocity_y(self, new_val):
+        self.__velocity_y = new_val
 
 
 # Test
